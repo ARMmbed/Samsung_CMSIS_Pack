@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package schemaVersion="1.4" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="PACK.xsd">
+  <vendor>Samsung</vendor>
+  <name>S5JS100</name>
+  <description>Internal Software Pack</description>
+  <url>https://github.com/ARMmbed/Samsung_CMSIS_Pack/</url>
+  <supportContact></supportContact>
+  <!--<license>Docs/license.txt</license>-->
+  
+<releases>
+	<release version="1.1.3" date="2020-02-17">
+		URL updated. Minor modification to comply the CMSIS pack standard.
+	  </release>
+  	<release version="1.1.2" date="2019-11-05">
+		Samsung SIDK S5JS100 Board Exampled bundle added
+	  </release>
+</releases>
+    
+<keywords>
+  <keyword>Samsung</keyword>
+  <keyword>S5JS100 Software Component</keyword>
+</keywords>
+
+  
+<apis>
+  <api Cclass="Device" Cgroup="SamsungS5JS100_API" exclusive="0">
+      <description>API for SamsungS5JS100</description>
+      <files>
+        <file category="doc"    name="Docs/API/SamsungS5JS100_API.htm"/>
+        <file category="header" name="API/Include/SamsungS5JS100_API.h"/>
+      </files>
+    </api>
+</apis>
+
+<boards>
+  <board vendor="Samsung" name="S5JS100_SIDK" revision="V1" salesContact="jh6186.park@samsung.com" orderForm="http://www.samsung.com">
+    <description>Samsung S5JS100 SIDK Board Description</description>
+    <image small="Images/SamsungS5JS100_SIDK_Board_small.png" large="Images/SamsungS5JS100_SIDK_Board_large.png"/>
+    <book category="setup"     name="Docs/S5JS100_SIDK/SamsungS5JS100_SIDK_Board_setup.pdf"      title="Getting Started"/>
+    <book category="schematic" name="Docs/S5JS100_SIDK/SamsungS5JS100_SIDK_Board_schematics.pdf" title="Schematics"/>
+    <book category="manual"    name="Docs/S5JS100_SIDK/SamsungS5JS100_SIDK_Board_um.pdf"         title="User Manual"/>
+    <mountedDevice             deviceIndex="0" Dvendor="ARM:82" Dname="ARMCM7"/>
+    <compatibleDevice          deviceIndex="0" Dvendor="ARM:82" Dfamily="ARM Cortex M7"/>
+    <!-- 
+	<feature type="ODbg"       n="1"           name="On-board J-LINK Lite"/> 
+    <feature type="PWR"        n="5"           name="USB Powered"/> 
+    <feature type="DIO"        n="8"/>
+    <feature type="SPI"        n="1"/>
+    <feature type="LED"        n="6"           name="User LEDs"/>
+    <feature type="ArduinoFF"  n="1"/>
+	<debugInterface adapter="J-Link Lite"      connector="Mini-USB"/>
+	-->
+  </board>
+</boards>
+
+<devices>
+  <family Dfamily="S5J Series" Dvendor="Samsung:47">
+	<processor Dcore="Cortex-M7" DcoreVersion="r2p1" Dfpu="0" Dmpu="0" Dendian="Little-endian"/>
+	<compile    header="Device/Include/S5JSxxx.h"/>
+	<debug      svd="SVD/S5JSxxx.svd"/>
+	<book      name="Docs/DUI0646A_cortex_m7_dgug.pdf"   title="Cortex-M7 Generic User Guide"/>
+	<book      name="Docs/S5JXXX_Datasheet.pdf"        title="S5JS Series Datasheet"/>
+	<book      name="Docs/S5JXXX_Product_Brief.pdf"    title="S5JS Product Brief"/>
+	<!-- <feature type="ExtInt"        n="16"/> -->
+	<feature type="Temp"          n="-40"     m="85"   name="Operating Temperature Range"/>
+	<feature type="VCC"           n="1.0"     m="3.8"/>
+	<feature type="RTC"           n="32768"/>
+	<feature type="WDT"           n="1"/>
+    <description>
+      The S5JS device family contains an ARM Cortex-M7 processor, running up to 200 MHz with a versatile set of on-chip peripherals.
+    </description>
+    <!-- ************************  Sub-family 'S5JS100'  **************************** -->
+    <subFamily DsubFamily="S5JS1xx">
+      <processor  Dclock="200000000"/>
+	  <feature type="IOs"           n="26"/>
+	  <feature type="I2C"           n="1"/>
+	  <feature type="SPI"           n="1"/>	  
+	  <feature type="UART"          n="2"/>
+	  <!-- <feature type="USI"           n="2"/> -->
+	  <feature type="Timer"         n="6"       m="32"/>
+      <!-- <feature type="QFP"           n="32"/> -->
+      <!-- *************************  Device 'S5JS100'  ***************************** -->
+      <device Dname="S5JS100">
+        <memory     name="IROM1"  access="rx"       start="0x00000000"  size="0x2000"     startup="1"   default="1"/>
+        <memory     name="IRAM1"  access="rw"       start="0x00100000"  size="0x80000"     init   ="0"   default="1"/>
+		<algorithm name="Flash/s5js100_16.FLM" start="0x40000000" size="0x1000000" default="1"/>
+      </device>
+    </subFamily>
+    
+  </family>
+</devices>
+
+<examples>
+  <example name="S5JS100 SIDK Board Example" doc="Abstract.txt" folder="S5JS100_Example">
+    <description>CMSIS-RTOS based example</description>
+    <board name="S5JS100_SIDK" vendor="Samsung"/>
+    <project>
+      <environment name="uv" load="S5JS100_Example.uvprojx"/>
+    </project>
+    <attributes>
+      <component Cclass="CMSIS"     Cgroup="CORE"/>
+      <component Cclass="Device"    Cgroup="Startup"/>
+      <component Cclass="CMSIS"     Cgroup="RTOS"/>
+    </attributes>
+  </example>
+</examples>
+
+<conditions> 
+	<condition id="ARM Cortex M7 Series">
+		<description>ARM Cortex M7 device required</description>
+		<require Dfamily="ARM Cortex M7" Dvendor="ARM:82"/>
+	</condition>
+	<condition id="S5JS100_SIDK Board Setup">
+		<description>Board Setup Code required</description>
+		<require condition="ARM Cortex M7 Series"/>
+		<require Cclass="Board Support" Cgroup="Board Setup"/>
+		<require Dvendor="Samsung:47" Dname="S5JS*"/>
+	</condition>
+	<condition id="ARM Compiler">
+		<require Tcompiler="ARMCC"/>
+	</condition>
+	<!--
+	<condition id="CM0">
+		<description>Cortex-M0 based device</description>
+		<require condition="ARM Compiler"/>
+		<accept  Dcore="Cortex-M0"/>
+		<accept  Dcore="Cortex-M0+"/>
+	</condition>
+	<condition id="CM3">
+		<description>Cortex-M3 based device</description>
+		<require condition="ARM Compiler"/>
+		<accept  Dcore="Cortex-M3"/>
+	</condition>
+	-->
+	<condition id="CM4_CM7">
+		<description>Cortex-M4 based device</description>
+		<require condition="ARM Compiler"/>
+		<accept  Dcore="Cortex-M4"/>
+		<accept  Dcore="Cortex-M7"/>
+	</condition>
+	<condition id="CMSIS Core with RTOS">
+		<description>CMSIS Core with RTOS for Cortex-M processor</description>		
+		<accept  condition="CM4_CM7"/>
+		<require Cclass="CMSIS" Cgroup="CORE"/>
+		<require Cclass="CMSIS" Cgroup="RTOS"/>
+	</condition>
+	<condition id="S5JS CMSIS-Core">
+		<!-- conditions selecting Devices -->
+		<description>Samsung S5JS Series devices and CMSIS-Core (Cortex-M)</description>
+		<require Cclass="CMSIS" Cgroup="CORE"/>
+		<require Dvendor="Samsung:47" Dname="S5JS*"/>
+	</condition>
+	<condition id="Startup ARM">
+		<description>Startup assembler file for ARMCC</description>
+		<require Tcompiler="ARMCC"/>
+	</condition>
+	<condition id="Startup GCC">
+		<description>Startup assembler file for GCC</description>
+		<require Tcompiler="GCC"/>
+	</condition>
+	<condition id="Startup IAR">
+		<description>Startup assembler file for IAR</description>
+		<require Tcompiler="IAR"/>
+	</condition>  
+</conditions>
+  
+<components>
+	<bundle Cbundle="SamsungS5JS100_SIDK_BoardSupport" Cclass="Board Support" Cversion="1.0.1">
+		<description>MyDevBoard custom board support package</description>
+		<doc>Docs/BSP/SamsungS5JS100_BSP.htm</doc>
+		<component Cgroup="Board Setup" condition="S5JS100_SIDK Board Setup">
+		<description>S5JS100_SIDK board setup code</description>
+		<files>
+			<file category="doc" name="Docs/BSP/SamsungS5JS100_Setup.htm"/>
+			<file category="header" name="S5JS100SWComp/Include/setup.h"/>
+			<file category="source" name="S5JS100SWComp/Source/setup.c"/>
+		</files>
+		</component>
+		<component Cgroup="I/O" Csub="LED" condition="S5JS100_SIDK Board Setup">
+		<description>LED code for S5JS100_SIDK board</description>
+		<files>
+			<file category="doc" name="Docs/BSP/LED.htm"/>
+			<file category="header" name="S5JS100SWComp/Include/led.h"/>
+			<file category="header" name="S5JS100SWComp/Include/config_led.h" attr="config" version="1.0.0"/>
+			<file category="source" name="S5JS100SWComp/Source/led.c"/>
+		</files>
+		</component>
+		<component Cgroup="I/O" Csub="GPIO" condition="S5JS100_SIDK Board Setup">
+		<description>GPIO code for custom board</description>
+		<files>
+			<file category="doc" name="Docs/BSP/GPIO.htm"/>
+			<file category="header" name="S5JS100SWComp/Include/gpio.h"/>
+			<file category="header" name="S5JS100SWComp/Include/config_gpio.h" attr="config" version="1.0.0"/>
+			<file category="source" name="S5JS100SWComp/Source/gpio.c"/>
+		</files>
+		</component>
+	</bundle>
+
+	<component Cclass="Device" Cgroup="HAL" Csub="GPIO" Cversion="1.0.0" condition="S5JS CMSIS-Core">
+	  <description>GPIO HAL for MyVendor S5JS Series</description>
+	  <files>
+		<file category="header" name="Device/Include/GPIO.h"/>
+		<file category="source" name="Device/Source/GPIO.c"/>
+	  </files>
+	</component>
+	<!-- 
+	<component Cclass="Device" Cgroup="HAL" Csub="ADC" Cversion="1.0.0" condition="S5JS CMSIS-Core">
+	  <description>ADC HAL for MyVendor S5JS Series</description>
+	  <files>
+		<file category="header" name="Device/Include/ADC.h"/>
+		<file category="source" name="Device/Source/ADC.c"/>
+	  </files>
+	</component>
+	<component Cclass="CMSIS Driver" Cgroup="I2C" Cversion="1.0.0" condition="S5JS CMSIS-Core" Capiversion="2.3.0" maxInstances="3">
+	  <description>I2C Driver for S5JS Series</description>
+	  <RTE_Components_h>
+		#define RTE_Drivers_I2C0                /* Driver I2C0 */
+		#define RTE_Drivers_I2C1                /* Driver I2C1 */
+		#define RTE_Drivers_I2C2                /* Driver I2C2 */
+	  </RTE_Components_h>
+	  <files>
+		<file category="source" name="Drivers/I2C/I2C_MVCM3.c"/>
+		<file category="header" name="Drivers/I2C/I2C_MVCM3.h"/>
+	  </files>
+	</component>
+	<component Cclass="CMSIS Driver" Cgroup="USART" Cversion="1.0.0" condition="S5JS CMSIS-Core" Capiversion="2.3.0" maxInstances="5">
+	  <description>UART Driver for S5JS Series</description>
+	  <RTE_Components_h>
+		#define RTE_Drivers_UART0               /* Driver UART0 */
+		#define RTE_Drivers_UART1               /* Driver UART1 */
+		#define RTE_Drivers_UART2               /* Driver UART2 */
+		#define RTE_Drivers_UART3               /* Driver UART3 */
+		#define RTE_Drivers_UART4               /* Driver UART4 */
+	  </RTE_Components_h>
+	  <files>
+		<file category="source" name="Drivers/UART/UART_MVCM3.c"/>
+		<file category="header" name="Drivers/UART/UART_MVCM3.h"/>
+	  </files>
+	</component>
+	-->
+    <component Cclass="S5JS100_Class" Cgroup="Samsung" Csub="Samsung_S5JS100_Group" Cversion="1.0.3" condition="CMSIS Core with RTOS" maxInstances="3">
+      <description>S5JS100SWComp</description>
+      <files>
+        <file category="doc"    name="Docs/S5JS100SWComp.htm"/>
+        <file category="header" name="S5JS100SWComp/header_mylib.h"/>
+        <file category="header" name="S5JS100SWComp/config/config_mylib.h" attr="config" version="1.0.0"/>
+        <file category="source" name="S5JS100SWComp/mylib_one.c"/>
+        <file category="source" name="S5JS100SWComp/mylib_two.c"/>		
+		<!-- <file category="library" condition="CM4_CM7" name="S5JS100SWComp/Lib/mylib_cm4.lib"/> -->
+      </files>
+    </component>
+	<!--
+	<component Cclass="MyVariant" Cgroup="MyGroup" Cvariant="Release" Cversion="1.0.2" condition="CMSIS Core with RTOS">
+	  <description>Release version of MyVariant</description>
+	  <RTE_Components_h>
+		
+		
+	  </RTE_Components_h>
+	  <files>
+		<file category="doc" name="Docs/S5JS100SWComp.htm"/>
+		<file category="header" name="S5JS100SWComp/header_mylib.h"/>
+		<file category="header" name="S5JS100SWComp/config/config_mylib.h" attr="config" version="1.0.0"/>
+		<file category="source" name="S5JS100SWComp/mylib_one.c"/>
+		<file category="source" name="S5JS100SWComp/mylib_two.c"/>				
+		<file category="source" name="S5JS100SWComp/Templates/mylib_template1.c" attr="template" select="Easy Template"/>		
+	  </files>
+	</component>
+	
+	<component Cclass="MyVariant" Cgroup="MyGroup" Cvariant="Debug" Cversion="1.0.2" condition="CMSIS Core with RTOS">
+	  <description>Debug version of MyVariant</description>
+	  <RTE_Components_h>		
+		
+	  </RTE_Components_h>
+	  <files>
+		<file category="doc" name="Docs/S5JS100SWComp.htm"/>
+		<file category="header" name="S5JS100SWComp/header_mylib.h"/>
+		<file category="header" name="S5JS100SWComp/config/debug_config_mylib.h" attr="config" version="1.0.0"/>
+		<file category="source" name="S5JS100SWComp/debug_mylib_one.c"/>
+		<file category="source" name="S5JS100SWComp/debug_mylib_two.c"/>		
+		<file category="library" condition="CM4_CM7" name="S5JS100SWComp/Lib/debug_mylib_cm4.lib"/> 
+	  </files>
+	</component>
+	-->
+	<component Cclass="Device" Cgroup="Startup" Cversion="1.0.0" condition="S5JS CMSIS-Core">
+      <description>System Startup for MyVendor S5JS Series</description>
+	  <files>		
+		<file category="include" name="Device/Include/"/>
+		<file category="sourceAsm"  name="Device/Source/ARM/startup_S5JS100.s" attr="config" condition="Startup ARM" version="1.0.0"/>
+		<file category="sourceAsm"  name="Device/Source/GCC/startup_S5JS100.S" attr="config" condition="Startup GCC" version="1.0.0"/>
+		<file category="sourceAsm"  name="Device/Source/IAR/startup_S5JS100.s" attr="config" condition="Startup IAR" version="1.0.0"/>
+		<file category="sourceC"  name="Device/Source/system_S5JSxxx.c"  attr="config" version="1.0.0"/>
+	  </files>
+    </component>
+
+</components>
+  
+  <!-- optional taxonomy section for defining new component Class and Group names -->
+  <!--
+  <taxonomy>
+  </taxonomy>
+  -->
+  
+</package>
